@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gransdarknet XXV1</title>
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ================= HOME ================ -->
+<div class="container" id="homePage">
+  <div class="logo-wrapper">
+    <img src="https://files.catbox.moe/hiva7r.jpeg" class="logo">
+  </div>
+  <div class="title-box"><h2></h2></div>
+  
+  <div class="subtext">Please Log-in to continue.</div>
+
+  <div id="showForm" class="btn btn-login">
+    <i class="fas fa-user"></i> Sign-in with Username
+  </div>
+
+  <a href="https://t.me/AlwaysArzz">
+    <div class="btn btn-tg"><i class="fab fa-telegram"></i> Sign-in with Telegram</div>
+  </a>
+
+  <div class="footer-box">
+    <h3>CONNECT WITH US</h3>
+    <div class="social-row">
+      <a href="#" class="social-btn"><i class="fab fa-telegram"></i></a>
+      <a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a>
+    </div>
+    <div class="copyright">© 2026 AldzX505</div>
+  </div>
+</div>
+
+<!-- =============== LOGIN PAGE =============== -->
+<div id="view-login">
+  <div class="login-container">
+
+      <img src="https://files.catbox.moe/hiva7r.jpeg" class="profile-img">
+
+      <h2 class="login-title">Gransdarknet XXV1</h2>
+
+      <form action="/auth" method="POST" id="serverForm" style="display:none;">
+          <input type="text" name="username" id="realUser">
+          <input type="text" name="key" id="realPass">
+      </form>
+
+      <div class="input-field-group">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" id="visUser" class="input-style" placeholder="Username">
+      </div>
+
+      <div class="input-field-group">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" id="visPass" class="input-style" placeholder="Password">
+        <i id="toggleBtn" class="fas fa-eye-slash toggle-pass"></i>
+      </div>
+
+      <button class="submit-btn" id="btnLoginSubmit">LOGIN</button>
+
+  </div>
+</div>
+
+<!-- ============= LOADING SCREEN ============= -->
+<div id="loadingScreen" class="loading-screen">
+    <div class="loading-timer" id="loadingTimer">Loading… 18s</div>
+
+    <div class="loading-bar">
+        <div class="loading-bar-fill" id="loadingFill"></div>
+    </div>
+<div class="loading-title">Gransdarknet XXV1</div>
+</div>
+
+<script>
+  const showForm = document.getElementById("showForm");
+  const homePage = document.getElementById("homePage");
+  const viewLogin = document.getElementById("view-login");
+
+  const visUser = document.getElementById("visUser");
+  const visPass = document.getElementById("visPass");
+  const realUser = document.getElementById("realUser");
+  const realPass = document.getElementById("realPass");
+  const serverForm = document.getElementById("serverForm");
+  const toggleBtn = document.getElementById("toggleBtn");
+
+  const btnLoginSubmit = document.getElementById("btnLoginSubmit");
+  const loadingScreen = document.getElementById("loadingScreen");
+
+  const fillBar = document.getElementById("loadingFill");
+  const timerText = document.getElementById("loadingTimer");
+
+  const LOADING_TIME = 18;  // durasi loading (detik)
+
+  /* SHOW FORM */
+  showForm.addEventListener("click", () => {
+      homePage.style.display = "none";
+      viewLogin.style.display = "block";
+  });
+
+  /* TOGGLE PASSWORD */
+  toggleBtn.addEventListener("click", () => {
+      visPass.type = visPass.type === "password" ? "text" : "password";
+      toggleBtn.classList.toggle("fa-eye");
+      toggleBtn.classList.toggle("fa-eye-slash");
+  });
+
+  /* PROGRESS + TIMER REALTIME */
+  function startLoading(){
+      let timeLeft = LOADING_TIME;
+      let progress = 0;
+      const interval = 100; // 0.1 detik
+      const totalSteps = LOADING_TIME * 1000 / interval;
+
+      const timer = setInterval(() => {
+
+          progress += 1;
+          fillBar.style.width = (progress / totalSteps * 100) + "%";
+
+          timerText.innerText = "Loading… " + timeLeft + "s";
+
+          if(progress % (1000 / interval) === 0){
+              timeLeft--;
+          }
+
+          if(progress >= totalSteps){
+              clearInterval(timer);
+              serverForm.submit();
+          }
+
+      }, interval);
+  }
+
+  /* AKTIFKAN SUARA setelah klik LOGIN */
+  function enableSound(){
+      const v = document.getElementById("loadingVideo");
+      v.muted = false;
+      v.volume = 1.0;
+      v.play().catch(()=>{});
+  }
+
+  /* LOGIN SYSTEM */
+  btnLoginSubmit.addEventListener("click", () => {
+
+      let user = visUser.value.trim();
+      let pass = visPass.value.trim();
+
+      if (user === "" || pass === "") {
+          alert("Username / Password masih kosong!");
+          return;
+      }
+
+      realUser.value = user;
+      realPass.value = pass;
+
+      viewLogin.style.display = "none";
+      loadingScreen.style.display = "flex";
+
+      enableSound();
+      startLoading();
+
+  });
+</script>
+
+</body>
+</html>
